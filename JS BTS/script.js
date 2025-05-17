@@ -39,7 +39,6 @@ calcAge(1991);
 // console.log(age);
 // printAge()*/
 
-
 /*
 // Hoisting and TDZ in Practice
 
@@ -169,4 +168,50 @@ var addArrow = (a, b) => {
 };
 addArrow(2, 5, 8);*/
 
+/*
+// Object References in Practice (Shallow vs. Deep Copies)
 
+const jessica1 = {
+  firstName: "Jessica",
+  lastName: "Williams",
+  age: 27,
+};
+
+function marryPerson(originalPerson, newLastName) {
+  originalPerson.lastName = newLastName;
+  return originalPerson;
+}
+
+const marriedJessica = marryPerson(jessica1, "Davis");
+
+// const marriedJessica = jessica1; //In this line or the above fn the object in itself is not copied but its address, so changing something in its copy will change the original also.
+// marriedJessica.lastName = 'Davis';
+
+console.log("Before:", jessica1); //lastNAme = Davis
+console.log("After:", marriedJessica); //lastName = Davis
+
+const jessica = {
+  firstName: "Jessica",
+  lastName: "Williams",
+  age: 27,
+  familiy: ["Alice", "Bob"],
+};
+
+// Shallow copy
+const jessicaCopy = { ...jessica }; //By doing this the primitive values won't be changed in original like before but for nested object(family) it will just have the address not the object itself, so values in family will also get changed in original.
+jessicaCopy.lastName = "Davis";
+
+// jessicaCopy.familiy.push('Mary');
+// jessicaCopy.familiy.push('John');
+
+// console.log('Before:', jessica);//lastName: "Williams", family:["Alice", "Bob", "Mary","John"]
+// console.log('After:', jessicaCopy);//"Davis", family:["Alice", "Bob", "Mary","John"]
+
+// Deep copy/clone
+const jessicaClone = structuredClone(jessica); //this will copy the object itself & will create a new object.
+jessicaClone.familiy.push("Mary");
+jessicaClone.familiy.push("John");
+
+console.log("Original:", jessica);
+console.log("Clone:", jessicaClone);
+*/
