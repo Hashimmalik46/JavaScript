@@ -1,5 +1,18 @@
 'use strict';
-/*
+
+// const restaurant = {
+//   name: 'Classico Italiano',
+//   location: 'Via Angelo Tavanti 23, Firenze, Italy',
+//   categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+//   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+//   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+
+//   order: function (starterIndex, mainIndex) {
+//     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+//   },
+// };
+
+// Destructuring objects
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -7,10 +20,41 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
+  // ES6 enhanced object literals
+  openingHours: {
+    thu: {
+      open: 12,
+      close: 22,
+    },
+    fri: {
+      open: 11,
+      close: 23,
+    },
+    sat: {
+      open: 0,
+      close: 24,
+    },
+  },
+
   order: function (starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
+  orderDelivery({ starterIndex = 1, mainIndex = 0, time = '20:00', address }) {
+    console.log(
+      `Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`
+    );
+  },
+  orderPasta: function (ing1, ing2, ing3) {
+    console.log(`Here is your delicious pasta with ${ing1}, ${ing2},${ing3}`);
+  },
+  orderingPizza: function (mainIngrediant, ...otherIngrediants) {
+    console.log(mainIngrediant);
+    console.log(otherIngrediants);
+  },
 };
+
+/*
+
 //Destructuring: Breaking down a complex data structure into a smaller data structure.
 const arr = [2, 3, 4];
 // const a = arr[0];
@@ -56,42 +100,7 @@ const [p = 1, q = 1, r = 1] = [8, 9];//f we remove any of the values it will tak
 console.log(p, q, r);
 */
 
-// Destructuring objects
-const restaurant = {
-  name: 'Classico Italiano',
-  location: 'Via Angelo Tavanti 23, Firenze, Italy',
-  categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
-  starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
-  mainMenu: ['Pizza', 'Pasta', 'Risotto'],
-
-  // ES6 enhanced object literals
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0,
-      close: 24,
-    },
-  },
-
-  order: function (starterIndex, mainIndex) {
-    return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
-  },
-  orderDelivery({ starterIndex = 1, mainIndex = 0, time = '20:00', address }) {
-    console.log(
-      `Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`
-    );
-  },
-  orderPasta: function (ing1, ing2, ing3) {
-    console.log(`Here is your delicious pasta with ${ing1}, ${ing2},${ing3}`);
-  },
-};
+/*
 //passing objects as arguments
 restaurant.orderDelivery({
   time: '22:30',
@@ -176,12 +185,174 @@ restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
 
 restaurant.orderPasta(...ingredients);
 
-
 // Spread operator with Objects, although objects are not iterables, but es2018 supports it.
-const newRestaurant = {...restaurant, founder: 'Hashim'}
+const newRestaurant = { ...restaurant, founder: 'Hashim' };
 console.log(newRestaurant);
 
-const restaurantCopy = {...restaurant};
+const restaurantCopy = { ...restaurant };
 restaurantCopy.name = 'Ristorant Roma';
 console.log(restaurantCopy.name);
 console.log(restaurant.name);
+
+//Rest Pattern(opp. of spread), packs the elements.
+
+//here we are using spread as it is on the right of the assignment operator.
+const array = [1, 2, ...[3, 4]];
+
+//rest because on the left side.
+const [p, q, ...others] = [1, 2, 3, 4, 5];
+console.log(p, q, others);
+
+const [pizza, , risotto, ...otherfood] = [
+  ...restaurant.mainMenu,
+  ...restaurant.starterMenu,
+];
+console.log(pizza, risotto, otherfood); //rest pattern doesnot includes any skipped elements it just includes all the remaining so it should be used at last in the destructuring assignment.
+
+//Objects
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(weekdays);
+
+//Functions(rest parameters)
+const add = function (...numbers) {
+  let sum =0;
+  for(let i=0;i<numbers.length;i++){
+    sum+=numbers[i];
+  }
+  console.log(sum);
+};
+add(2, 3);
+add(5, 3, 7, 2);
+add(8, 2, 5, 3, 2, 1, 4);
+
+const x =[23,5,7];
+add(...x);//using spread op
+
+restaurant.orderingPizza('mushrooms','onion','olives','spinach');
+*/
+
+/*
+// Short-circuiting(&& and ||)
+//can use any data type, return any data type, and perform short-circuiting
+console.log('----OR----');
+//Short-circuiting OR returns the first true value and returns the last value if all are falsy.
+console.log(3 || 'Jonas');
+console.log('' || 'jonas');
+console.log(true || 0);
+console.log(undefined || null);
+
+// restaurant.numguests = 23;
+const guests1 = restaurant.numguests ? restaurant.numguests : 10;
+console.log(guests1); //we are here trying to set a default values means if restaurant.numguests is undefined it will be set to 10,
+//we can do it by short-circuiting.
+
+const guests2 = restaurant.numguests || 10;
+console.log(guests2);
+
+console.log('----AND----');
+//It returns the first fasle value and returns the last one if all are true.
+console.log(0 && 'jonas');
+console.log(7 && 'jonas');
+
+//Nullish Coalescing operator
+restaurant.numguests = 0;
+const guests3 = restaurant.numguests || 10;
+console.log(guests3);//Won't work if numguests= 0 as 0 in itself is a falsy value, so ans. would be 10.
+
+//Nullish: null and undefined(not 0 or '')
+const guestCorrect = restaurant.numguests ??10;
+console.log(guestCorrect);
+*/
+
+//Logical assignment operators
+const rest1 = {
+  name: 'Capri',
+  numGuests: 20,
+};
+const rest2 = {
+  name: 'La Piazza',
+  owner: 'Hashim',
+};
+//Let's say we want to assign a default value.
+
+// rest1.numGuests = rest1.numGuests || 10;
+// rest2.numGuests = rest2.numGuests || 10;
+
+//OR Assignment Operator
+rest1.numGuests ||= 10;
+rest2.numGuests ||= 10;
+
+// rest1.numGuests??=10; if numGuests = 0
+// rest2.numGuests??=10;
+
+//Logical AND Operator
+//Let's say we want to anonymise someone.
+//rest1.owner = rest1.owner && '<ANONYMOUS>'; this will return undefined as rest1.owner is undefined and undefined is already a falsy value.
+// rest2.owner = rest2.owner && '<ANONYMOUS>';
+rest1.owner &&= '<ANONYMOUS>';//it won't return undefined, the object will stay the same.
+rest2.owner &&= '<ANONYMOUS>';
+
+console.log(rest1);
+console.log(rest2);
+
+///////////////////////////////////////
+// Coding Challenge #1
+
+/* 
+We're building a football betting app (soccer for my American friends 😅)!
+
+Suppose we get data from a web service about a certain game (below). In this challenge we're gonna work with the data. So here are your tasks:
+
+1. Create one player array for each team (variables 'players1' and 'players2')
+2. The first player in any player array is the goalkeeper and the others are field players. For Bayern Munich (team 1) create one variable ('gk') with the goalkeeper's name, and one array ('fieldPlayers') with all the remaining 10 field players
+3. Create an array 'allPlayers' containing all players of both teams (22 players)
+4. During the game, Bayern Munich (team 1) used 3 substitute players. So create a new array ('players1Final') containing all the original team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
+5. Based on the game.odds object, create one variable for each odd (called 'team1', 'draw' and 'team2')
+6. Write a function ('printGoals') that receives an arbitrary number of player names (NOT an array) and prints each of them to the console, along with the number of goals that were scored in total (number of player names passed in)
+7. The team with the lower odd is more likely to win. Print to the console which team is more likely to win, WITHOUT using an if/else statement or the ternary operator.
+
+TEST DATA FOR 6: Use players 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'. Then, call the function again with players from game.scored
+
+GOOD LUCK 😀
+*/
+
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
