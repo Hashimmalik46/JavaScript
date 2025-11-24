@@ -94,3 +94,52 @@ currenciesUnique.forEach(function (value, key, map) {
 => Filter returns a new array containing the elements that passed a specified test condition.
 => Boils all array elements down to one single value(e.g., adding all elements together. No new array but one single value.)
 */
+
+const euroToUsd = 1.1;
+
+const movementsUSD = movements.map(function (mov) {
+  return mov * euroToUsd;
+});
+
+// const movementsUSD = movements.map(mov => mov * euroToUsd);
+
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsUSDfor = [];
+for (const mov of movements) movementsUSDfor.push(mov * euroToUsd);
+console.log(movementsUSDfor);
+
+const movementsDescription = movements.map(function (mov, i) {
+  return `Movement ${
+    i + 1
+  }: You ${mov > 0 ? 'deposited' : 'withdrew'}${Math.abs(mov)}`;
+});
+console.log(movementsDescription);
+//ForEach creates side-effects(at each iteration we perform some action that is visible in the console(to do something without returning) but the map method returns the entire array not individual elements).
+
+//Filter Method
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+//Reduce Method(first parameter is accumulator)
+console.log(movements);
+const balance = movements.reduce(function (acc, curr, i, arr) {
+  console.log(`Iteration ${i}: ${acc}`);
+  return acc + curr;
+}, 0); //0 is the initial value of the acc in the first loop iteration.
+
+console.log(balance);
+
+//Maximum value
+const max = movements.reduce(function (acc, curr,i) {
+  console.log(`At iteration ${i} Accumulator is ${acc} & Current Element is ${curr}`);
+  return acc > curr ? acc : curr;
+}, movements[0]);
+console.log(max);
