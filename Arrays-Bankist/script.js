@@ -74,17 +74,36 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
-
-const calDisplayBalance = function (movements) {
+const calcDisplayBalance = function (movements) {
   const balance = movements.reduce(function (acc, mov) {
     return acc + mov;
   }, 0);
-  labelBalance.textContent=`${balance} EUR`
+  labelBalance.textContent = `${balance} €`;
 };
-calDisplayBalance(account1.movements)
+// calcDisplayBalance(account1.movements);
 
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes} €`;
+
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)} €`;
+
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * acc.interestRate) / 100)
+    .filter(int => int >= 1)
+    .reduce((acc, intAmount) => acc + intAmount, 0);
+  labelSumInterest.textContent = `${interest} €`;
+};
+
+// calcDisplaySummary(account1.movements);
 
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -99,8 +118,25 @@ const createUsernames = function (accs) {
 };
 
 createUsernames(accounts);
-console.log(accounts);
 
+//Event Handlers
 
+let currAccount;
+btnLogin.addEventListener('click', function (e) {
+  //Prevent form from submitting as clicking the button that  is in form field, triggers the defualt behavior of reload.
+  e.preventDefault();
+  currAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+  console.log(currAccount);
+  if (currAccount?.pin === Number(inputLoginPin.value)) {
+    labelWelcome.textContent = `Welcome back, ${
+      currAccount.owner.split(' ')[0]
+    } !`;
+    containerApp.style.opacity = 100;
 
+    inputLoginUsername.value = inputLoginPin.value = '';
 
+    displayMovements(currAccount.movements);
+    calcDisplaySummary(currAccount);
+    calcDisplayBalance(currAccount.movements);
+  }
+});

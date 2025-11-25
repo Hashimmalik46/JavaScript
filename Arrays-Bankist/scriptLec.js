@@ -92,7 +92,7 @@ currenciesUnique.forEach(function (value, key, map) {
 /*
 => Map returns a new array containing the results of applying an operation on all original array elements.
 => Filter returns a new array containing the elements that passed a specified test condition.
-=> Boils all array elements down to one single value(e.g., adding all elements together. No new array but one single value.)
+=> Reduce boils all array elements down to one single value(e.g., adding all elements together. No new array but one single value.)
 */
 
 const euroToUsd = 1.1;
@@ -138,8 +138,32 @@ const balance = movements.reduce(function (acc, curr, i, arr) {
 console.log(balance);
 
 //Maximum value
-const max = movements.reduce(function (acc, curr,i) {
-  console.log(`At iteration ${i} Accumulator is ${acc} & Current Element is ${curr}`);
+const max = movements.reduce(function (acc, curr, i) {
+  console.log(
+    `At iteration ${i} Accumulator is ${acc} & Current Element is ${curr}`
+  );
   return acc > curr ? acc : curr;
 }, movements[0]);
 console.log(max);
+
+//Chaining/Pipeline
+const usdtoeuro = 1.1;
+const total = movements
+  .filter(mov => mov > 0)
+  // .map(mov => mov * usdtoeuro)
+  .map((mov, i, arr) => {
+    console.log(arr); //map called on the array returned by the filter method.
+    return mov * usdtoeuro;
+  })
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(total);
+
+//Find Method(loops over the array and returns the first match i.e.,only one element or object)
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
