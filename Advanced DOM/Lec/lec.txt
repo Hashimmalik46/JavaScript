@@ -1,0 +1,2 @@
+Dom is a complex api.
+event target is something abstract we dont create it ourselves.
