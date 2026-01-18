@@ -1,0 +1,21 @@
+Order_ID,Product,Category,Price,Quantity,City
+101,Laptop,Electronics,1200,1,New York
+102,Headphones,Audio,150,2,Los Angeles
+103,Monitor,Electronics,300,2,Chicago
+104,Keyboard,Accessories,80,5,New York
+105,Mouse,Accessories,25,10,Chicago
+106,Laptop,Electronics,1200,1,San Francisco
+107,Monitor,Electronics,300,1,New York
+108,Headphones,Audio,150,4,Chicago
+109,Mouse,Accessories,25,12,Los Angeles
+110,Keyboard,Accessories,80,3,San Francisco
+111,Laptop,Electronics,1250,2,Chicago
+112,Headphones,Audio,140,5,New York
+113,Monitor,Electronics,320,1,Los Angeles
+114,Laptop,Electronics,1100,1,San Francisco
+115,Mouse,Accessories,25,5,New York
+116,Keyboard,Accessories,85,4,Chicago
+117,Headphones,Audio,160,2,Los Angeles
+118,Monitor,Electronics,310,2,San Francisco
+119,Laptop,Electronics,1300,1,New York
+120,Mouse,Accessories,30,8,Chicago

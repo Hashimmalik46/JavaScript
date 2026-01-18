@@ -10,6 +10,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: 'Premium',
 };
 
 const account2 = {
@@ -17,6 +18,7 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: 'Premium',
 };
 
 const account3 = {
@@ -24,6 +26,7 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  type: 'Standard',
 };
 
 const account4 = {
@@ -31,6 +34,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: 'Basic',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -61,9 +65,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = ` <div class="movements__row">
           <div class="movements__type movements__type--${type}">${
@@ -76,11 +81,11 @@ const displayMovements = function (movements) {
 };
 // displayMovements(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce(function (acc, mov) {
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce(function (acc, mov) {
     return acc + mov;
   }, 0);
-  labelBalance.textContent = `${balance} €`;
+  labelBalance.textContent = `${acc.balance} €`;
 };
 // calcDisplayBalance(account1.movements);
 
@@ -119,8 +124,13 @@ const createUsernames = function (accs) {
 
 createUsernames(accounts);
 
-//Event Handlers
+const updateUi = function (acc) {
+  displayMovements(acc.movements);
+  calcDisplaySummary(acc);
+  calcDisplayBalance(acc);
+};
 
+//Event Handlers
 let currAccount;
 btnLogin.addEventListener('click', function (e) {
   //Prevent form from submitting as clicking the button that  is in form field, triggers the defualt behavior of reload.
@@ -134,9 +144,63 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
 
     inputLoginUsername.value = inputLoginPin.value = '';
-
-    displayMovements(currAccount.movements);
-    calcDisplaySummary(currAccount);
-    calcDisplayBalance(currAccount.movements);
+    updateUi(currAccount);
   }
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  inputTransferAmount.value = inputTransferTo.value = '';
+  console.log(amount, recieverAcc);
+
+  if (
+    recieverAcc &&
+    amount > 0 &&
+    currAccount.balance >= amount &&
+    recieverAcc?.username !== currAccount.username
+  ) {
+    recieverAcc.movements.push(amount);
+    currAccount.movements.push(-amount);
+    updateUi(currAccount);
+  }
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const reqAmount = Number(inputLoanAmount.value);
+  if (
+    reqAmount > 0 &&
+    currAccount.movements.some(mov => mov >= reqAmount * 0.1)
+  ) {
+    currAccount.movements.push(reqAmount);
+    updateUi(currAccount);
+  }
+  inputLoanAmount.value = '';
+});
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currAccount.username &&
+    Number(inputClosePin.value) === currAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currAccount.username
+    );
+    // console.log(index);
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+  }
+  inputClosePin.value = inputCloseUsername.value = '';
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function () {
+  displayMovements(currAccount.movements, !sorted);
+  sorted = !sorted;
 });

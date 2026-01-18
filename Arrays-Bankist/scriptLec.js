@@ -167,3 +167,150 @@ console.log(accounts);
 
 const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(account);
+const index1 = accounts.findIndex(acc => acc.owner === 'Jonas Schmedtmann');
+console.log(index1);
+
+//The new findLast and findLastIndex methods
+console.log(movements);
+const lastWithdrawal = movements.findLast(mov => mov < 0);
+console.log(lastWithdrawal);
+const latestLargestMovement = movements.findLastIndex(
+  mov => Math.abs(mov) > 1000
+);
+console.log(latestLargestMovement);
+console.log(
+  `Your Latest largest movement was ${
+    movements.length - latestLargestMovement - 1
+  } movements ago`
+);
+
+console.log(movements);
+//Checks Equality
+console.log(movements.includes(-130));
+
+//Some and every method
+//Checks condition
+console.log(movements.some(mov => mov > 0));
+
+//Every method
+//Returns true when all satisfy
+console.log(movements.every(mov => mov > 0));
+
+//separate callback
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+
+//Flat and FlatMap methods
+const arrnN = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arrnN.flat());
+//only goes one level deep
+
+const arrD = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrD.flat(2));
+
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, curr) => acc + curr, 0);
+console.log(overallBalance);
+
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, curr) => acc + curr, 0);
+console.log(overallBalance2);
+//But flatMap goes just one level deep, so if we need to go deeper we hav to use them separately.
+
+//Sorting
+const owners = ['Jonas', 'Zach', 'Adam'];
+console.log(owners.sort());
+
+// console.log(movements.sort()); //doesnt work directly on numbers as it takes them as strings
+
+//return < 0, A, B (keeping the order)
+//return > 0, B, A  (switching the order)
+//Asc
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+// console.log(movements);
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+//Des
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (b > a) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
+
+//Array Grouping(group array elements based on some condition)
+console.log(movements);
+const groupedMovement = Object.groupBy(movements, movements =>
+  movements > 0 ? 'deposit' : 'withdrawals'
+);
+console.log(groupedMovement);
+
+const groupedByActivity = Object.groupBy(accounts, account => {
+  const movementsCount = account.movements.length;
+  if (movementsCount >= 8) return 'Highly active';
+  if (movementsCount >= 4) return 'active';
+  if (movementsCount >= 1) return 'less active';
+  return 'inactive';
+});
+console.log(groupedByActivity);
+
+//Main use-case
+const groupedByType = Object.groupBy(accounts, account => account.type);
+console.log(groupedByType);
+
+//More ways of creating and filling arrays
+//Empty array + Fill method
+const x = new Array(7); //creates an empty array of length 7
+x.fill(1, 3, 5); //fill 1s from 3 to 5 index
+console.log(x);
+
+x.fill(1, 3); //3 is where we want it to start
+console.log(x);
+
+x.fill(1);
+console.log(x);
+
+//Array.form Method
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+
+//Main use-case(creating arrays from other iterables)
+labelBalance.addEventListener('click', function () {
+  const movementUi = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+
+  console.log(movementUi);
+  // const movementUi = Array.from(document.querySelectorAll('.movements__value'));
+
+  // console.log(movementUi.map(el => el.textContent.replace('€', '')));
+});
+//If we used map on result of queryselectorall directly it wont work as it returns a node list not a real array thats why array.form is useful.
+
+//Non-Destructed Alternatives: ToReversed, ToSorted, ToSpliced
+//When we dont want to mutate the original array.
+console.log(movements);
+// const revMov=movements.reverse()
+// console.log(movements);
+
+// const revMov = movements.slice().reverse();//slice() creates a new copy so preventing mutation.
+/////Or
+const revMov = movements.toReversed();
+console.log(revMov);
+console.log(movements);
+
+//toSorted, toSpliced(work same but dont mutate the array)
+
+//changing an element in array wihout mutating the org.
+// movements[1]=2000//mutated
