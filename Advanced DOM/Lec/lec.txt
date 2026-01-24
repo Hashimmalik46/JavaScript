@@ -1,2 +1,12 @@
 Dom is a complex api.
 event target is something abstract we dont create it ourselves.
+
+Bubbling and capturing:
+->When an event is created it is generated at the root or top of the document, from where it propagates to each parent element not through any sibling elements (Capturing Phase), once it reaches its target the event is handled (Target Phase), then it starts propagating back to root and passes through each parent element (Bubbling Phase).
+->It is if the event also happened in each element.
+->By default events can be only held in the target and bubbling phase.
+
+//Efficient Script Loading(DEFER and ASYNC)
+<script src="script.js">
+<script async src="script.js">
+<script defer src="script.js">
