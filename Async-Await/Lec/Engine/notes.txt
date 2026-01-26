@@ -1,0 +1,5 @@
+=>All the async fns are run in web apis or in the backgorund.
+=>After loaded they are pushed in the callback queue. Callback queue is like a queue which stores the tasks before pushing them onto the callstack.
+*The timing of the timer fn is not a guarantee because lets say we have a 5sec timer and there are already some tasks in the callnback queue so it can take more than 5sec but never less than that.
+=>For promises there's a special queue called microtask queue as these are called microtasks, and this queue has a priority over callback queue.
+*And to push these tasks onto callstack, eventloop handles this, and whenever there is a push its called eventloop take.
